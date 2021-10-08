@@ -13,11 +13,12 @@ describe('lab15-authentication routes', () => {
     const res = await request(app)
       .post('/api/auth/signup')
       .send({ email: 'alpastor@tacos.com', password:'corn-tortilla' });
-
+      
     expect(res.body).toEqual(
       { id: expect.any(String),
         email: 'alpastor@tacos.com' });
   });
+
 
 
 
