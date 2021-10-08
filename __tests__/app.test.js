@@ -71,6 +71,21 @@ describe('lab15-authentication routes', () => {
 
   });
 
+  //CHECKS FOR INCORRECT EMAIL CREDENTIALS WHEN SIGININ
+  it('cheks for wrong email credential when signin', async () => {
+    await UserService.create({ 
+      email: 'alpastor@tacos.com', 
+      password:'corn-tortilla' 
+    });
+  
+    const res = await request(app)
+      .post('/api/auth/signin')
+      .send({ email: 'pollo@tacos.com', password:'corn-tortilla' });
+        
+    expect(res.status).toEqual(401);
+  
+  });
+
 
 
 
