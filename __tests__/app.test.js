@@ -86,9 +86,28 @@ describe('lab15-authentication routes', () => {
   
   });
 
+  //GETS THE INFORMATION OF THE CURRENTLY USER SIGNED IN
+  it('gets the information of the user signin', async () => {
+    await UserService.create({ 
+      email: 'alpastor@tacos.com', 
+      password:'corn-tortilla' 
+    });
 
+    const agent = request.agent(app);
 
+    await agent.post('/api/auth/signin')
+      .send({
+        email: 'alpastor@tacos.com', 
+        password:'corn-tortilla'
+      });
 
+    const res = await agent.get('/api/auth/me');
+    expect(res.body).toEqual({
+      id: expect.any(String),
+      email:'alpastor@tacos.com'
+    });
+
+  });
 
 
 
