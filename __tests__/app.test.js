@@ -15,14 +15,9 @@ describe('lab15-authentication routes', () => {
       .send({ email: 'alpastor@tacos.com', password:'corn-tortilla' });
 
     expect(res.body).toEqual(
-      { email: 'alpastor@tacos.com', 
-        password:'corn-tortilla' });
+      { id: expect.any(String),
+        email: 'alpastor@tacos.com' });
   });
-
-
-
-
-
 
 
 
