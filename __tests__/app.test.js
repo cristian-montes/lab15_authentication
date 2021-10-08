@@ -2,6 +2,7 @@ const pool = require('../lib/utils/pool.js');
 const setup = require('../data/setup.js');
 const request = require('supertest');
 const app = require('../lib/app.js');
+const UserService = require('../lib/services/UserService.js');
 
 describe('lab15-authentication routes', () => {
   beforeEach(() => {
@@ -13,12 +14,28 @@ describe('lab15-authentication routes', () => {
     const res = await request(app)
       .post('/api/auth/signup')
       .send({ email: 'alpastor@tacos.com', password:'corn-tortilla' });
-      
+
     expect(res.body).toEqual(
       { id: expect.any(String),
         email: 'alpastor@tacos.com' });
   });
 
+  //CHECKS FOR EXISTING EMAILS AND THROWS A 400.
+  it('checks for 400 if user already exists', async () => {
+    await UserService.create({ 
+      email: 'alpastor@tacos.com', 
+      password:'corn-tortilla' 
+    });
+
+    const res = await request(app)
+      .post('/api/auth/signup')
+      .send({ email: 'alpastor@tacos.com', password:'corn-tortilla' });
+      
+    expect(res.status).toEqual(400);
+  
+
+
+  });
 
 
 
