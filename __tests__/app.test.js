@@ -20,7 +20,8 @@ describe('lab15-authentication routes', () => {
         email: 'alpastor@tacos.com' });
   });
 
-  //CHECKS FOR EXISTING EMAILS AND THROWS A 400.
+
+  //CHECKS FOR EXISTING EMAILS AND THROWS A 400, IF TRYING TO SIGNUP WITH .
   it('checks for 400 if user already exists', async () => {
     await UserService.create({ 
       email: 'alpastor@tacos.com', 
@@ -33,9 +34,29 @@ describe('lab15-authentication routes', () => {
       
     expect(res.status).toEqual(400);
   
-
-
   });
+
+
+  //SIGNS IN A USER 
+  it('sign in a user via post', async () => {
+    await UserService.create({ 
+      email: 'alpastor@tacos.com', 
+      password:'corn-tortilla' 
+    });
+    const res = await request(app)
+      .post('/api/auth/sigin')
+      .send({
+        email: 'alpastor@tacos.com', 
+        password:'corn-tortilla'
+      });
+
+    expect(res.body).toEqual({
+      id: expect.any(String),
+      email: 'alpastor@tacos.com' }
+    );
+  });
+
+
 
 
 
