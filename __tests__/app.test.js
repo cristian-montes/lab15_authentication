@@ -3,6 +3,7 @@ const setup = require('../data/setup.js');
 const request = require('supertest');
 const app = require('../lib/app.js');
 const UserService = require('../lib/services/UserService.js');
+const User = require('../lib/models/User.js');
 
 describe('lab15-authentication routes', () => {
   beforeEach(() => {
@@ -84,6 +85,30 @@ describe('lab15-authentication routes', () => {
         
     expect(res.status).toEqual(401);
   
+  });
+
+  //GETS THE INFORMATION OF THE CURRENTLY USER SIGNED IN
+  it('gets the information of the user signin', async () => {
+    await UserService.create({ 
+      email: 'alpastor@tacos.com', 
+      password:'corn-tortilla' 
+    });
+
+    await UserService.siginAuthorization({ 
+      email: 'alpastor@tacos.com', 
+      password:'corn-tortilla' 
+    });
+
+    const res = await request(app)
+      .get('/api/auth/me');
+      
+    expect(res.body).toEqual({
+      id: expect.any(String),
+      email:'alpastor@tacos.com'
+    });
+
+
+
   });
 
 
