@@ -44,7 +44,7 @@ describe('lab15-authentication routes', () => {
       password:'corn-tortilla' 
     });
     const res = await request(app)
-      .post('/api/auth/sigin')
+      .post('/api/auth/signin')
       .send({
         email: 'alpastor@tacos.com', 
         password:'corn-tortilla'
@@ -55,6 +55,23 @@ describe('lab15-authentication routes', () => {
       email: 'alpastor@tacos.com' }
     );
   });
+
+  //CHECKS FOR INCORRECT PASSWORD CREDENTIALS WHEN SIGININ
+  it('cheks for wrong password credential when signin', async () => {
+    await UserService.create({ 
+      email: 'alpastor@tacos.com', 
+      password:'corn-tortilla' 
+    });
+
+    const res = await request(app)
+      .post('/api/auth/signin')
+      .send({ email: 'alpastor@tacos.com', password:'bread' });
+      
+    expect(res.status).toEqual(401);
+
+  });
+
+
 
 
 
