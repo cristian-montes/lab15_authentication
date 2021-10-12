@@ -9,4 +9,6 @@ setup(pool)
       password: process.env.ADMIN_PASSWORD,
       roleTitle: 'ADMIN'
     })
-  );
+  )
+  .catch((err) => console.error(err))
+  .finally(() => process.exit());
