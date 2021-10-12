@@ -8,7 +8,7 @@ const UserService = require('../lib/services/UserService.js');
 const standardUser = {
   email: 'alpastor@tacos.com',
   password:'corn-tortilla', 
-  role: 'CUSTOMER' 
+  role: 'CUSTOMER'
 };
 
 
@@ -35,17 +35,12 @@ describe('lab15-authentication routes', () => {
   it('checks for 400 if user already exists', async () => {
     await request(app)
       .post('/api/auth/signup')
-      .send({ email: 'alpastor@tacos.com',
-        password:'corn-tortilla', 
-        role: 'CUSTOMER' 
-      });
+      .send(standardUser);
+   
 
     const res = await request(app)
       .post('/api/auth/signup')
-      .send({ email: 'alpastor@tacos.com',
-        password:'corn-tortilla', 
-        role: 'CUSTOMER' 
-      });
+      .send(standardUser);
     expect(res.status).toEqual(400);
   
   });
@@ -53,34 +48,33 @@ describe('lab15-authentication routes', () => {
 
   
   //SIGNS IN A USER 
-  xit('sign in a user via post', async () => {
-    await UserService.create({ 
-      email: 'alpastor@tacos.com', 
-      password:'corn-tortilla' 
-    });
+  it('sign in a user via post', async () => {
+    await request(app)
+      .post('/api/auth/signup')
+      .send(standardUser);
+
     const res = await request(app)
       .post('/api/auth/signin')
-      .send({
-        email: 'alpastor@tacos.com', 
-        password:'corn-tortilla'
-      });
+      .send(standardUser);
 
     expect(res.body).toEqual({
       id: expect.any(String),
-      email: 'alpastor@tacos.com' }
-    );
+      email: 'alpastor@tacos.com',
+      role: 'CUSTOMER' 
+    });
   });
 
   //CHECKS FOR INCORRECT PASSWORD CREDENTIALS WHEN SIGININ
   xit('cheks for wrong password credential when signin', async () => {
     await UserService.create({ 
       email: 'alpastor@tacos.com', 
-      password:'corn-tortilla' 
+      password:'corn-tortilla',
+      role: 'CUSTOMER'
     });
 
     const res = await request(app)
       .post('/api/auth/signin')
-      .send({ email: 'alpastor@tacos.com', password:'bread' });
+      .send({ email: 'alpastor@tacos.com', password:'bread',  });
       
     expect(res.status).toEqual(401);
 
