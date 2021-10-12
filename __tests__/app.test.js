@@ -155,7 +155,42 @@ describe('lab15-authentication routes', () => {
 
   });
 
+  //ONLY TO SIGN ADMINS
+  it('trows an error is a non ADMINS trys to update customers role', async () => {
+    await UserService.create({
+      email: 'administrador@gmail.com',
+      password: '1234',
+      roleTitle: 'ADMIN',
+    });
 
+    await UserService.create({
+      email: 'normalbird@gmail.com',
+      password: '1234',
+      roleTitle: 'CUSTOMER',
+    });
+
+
+    const agent = request.agent(app);
+
+    await agent.post('/api/auth/signin').send({
+      email: 'normalbird@gmail.com',
+      password: '1234',
+      roleTitle: 'CUSTOMER',
+    });
+   
+
+    const res = await agent.put('/api/auth/upgrade/2')
+      .send({ 
+        email: 'normalbird@gmail.com',
+        role: 'ADMIN' 
+      });
+
+    expect(res.body).toEqual({
+      message: 'Unauthorized',
+      status: 403,
+    });
+
+  });
 
 
 
