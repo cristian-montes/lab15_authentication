@@ -65,31 +65,29 @@ describe('lab15-authentication routes', () => {
   });
 
   //CHECKS FOR INCORRECT PASSWORD CREDENTIALS WHEN SIGININ
-  xit('cheks for wrong password credential when signin', async () => {
-    await UserService.create({ 
-      email: 'alpastor@tacos.com', 
-      password:'corn-tortilla',
-      role: 'CUSTOMER'
-    });
+  it('cheks for wrong password credential when signin', async () => {
+    await request(app)
+      .post('/api/auth/signup')
+      .send(standardUser);
 
     const res = await request(app)
       .post('/api/auth/signin')
-      .send({ email: 'alpastor@tacos.com', password:'bread',  });
+      .send({ email: 'alpastor@tacos.com', password:'bread', role:'CUSTOMER' });
       
     expect(res.status).toEqual(401);
 
   });
 
   //CHECKS FOR INCORRECT EMAIL CREDENTIALS WHEN SIGININ
-  xit('cheks for wrong email credential when signin', async () => {
-    await UserService.create({ 
-      email: 'alpastor@tacos.com', 
-      password:'corn-tortilla' 
-    });
+  it('cheks for wrong email credential when signin', async () => {
+    await request(app)
+      .post('/api/auth/signup')
+      .send(standardUser);
+
   
     const res = await request(app)
       .post('/api/auth/signin')
-      .send({ email: 'pollo@tacos.com', password:'corn-tortilla' });
+      .send({ email: 'pollo@tacos.com', password:'corn-tortilla', role:'CUSTOMER' });
         
     expect(res.status).toEqual(401);
   
