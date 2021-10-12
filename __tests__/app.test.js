@@ -2,7 +2,7 @@ const pool = require('../lib/utils/pool.js');
 const setup = require('../data/setup.js');
 const request = require('supertest');
 const app = require('../lib/app.js');
-const UserService = require('../lib/services/UserService.js');
+// const UserService = require('../lib/services/UserService.js');
 
 
 const standardUser = {
@@ -94,24 +94,22 @@ describe('lab15-authentication routes', () => {
   });
 
   //GETS THE INFORMATION OF THE CURRENTLY USER SIGNED IN
-  xit('gets the information of the user signin', async () => {
-    await UserService.create({ 
-      email: 'alpastor@tacos.com', 
-      password:'corn-tortilla' 
-    });
+  it('gets the information of the user signin', async () => {
+    await request(app)
+      .post('/api/auth/signup')
+      .send(standardUser);
 
     const agent = request.agent(app);
 
-    await agent.post('/api/auth/signin')
-      .send({
-        email: 'alpastor@tacos.com', 
-        password:'corn-tortilla'
-      });
+    await agent.post('/api/auth/signin').send(standardUser);
 
     const res = await agent.get('/api/auth/me');
     expect(res.body).toEqual({
       id: expect.any(String),
-      email:'alpastor@tacos.com'
+      email:'alpastor@tacos.com',
+      role:'CUSTOMER',
+      exp: expect.any(Number),
+      iat: expect.any(Number),
     });
 
   });
